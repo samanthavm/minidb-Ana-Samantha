@@ -37,19 +37,16 @@ def escrever_pagina(nome_arquivo: str, n: int, bytes_pagina: bytes) -> None:
         arq.seek(offset)
         arq.write(bytes_pagina)
 
-def main():
-    arquivo = input("Arquivo:")
-    if arquivo == "":
-        print("Nenhum nome de arquivo inserido")
-    else:
-        pagina2 = le_pagina(arquivo, 2)
-        registro = struct.pack(">II",1, 20254000)
-        slot0 = TAMANHO_CABECALHO + (0*TAMANHO_REGISTRO)
 
-        pagina2[slot0:slot0 + TAMANHO_REGISTRO] = registro
-        struct.pack_into(">H", pagina2, 0, 1)
-        escrever_pagina(arquivo, 2, bytes(pagina2))
-        print("Registro gravado com sucesso")
+arquivo = input("Arquivo:")
+if arquivo == "":
+    print("Nenhum nome de arquivo inserido")
+else:
+    pagina2 = le_pagina(arquivo, 2)
+    registro = struct.pack(">II",1, 20254000)
+    slot0 = TAMANHO_CABECALHO + (0*TAMANHO_REGISTRO)
 
-if __name__ == "__main__":
-    main()
+    pagina2[slot0:slot0 + TAMANHO_REGISTRO] = registro
+    struct.pack_into(">H", pagina2, 0, 1)
+    escrever_pagina(arquivo, 2, bytes(pagina2))
+    print("Registro gravado com sucesso")
