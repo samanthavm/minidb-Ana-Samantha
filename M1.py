@@ -58,4 +58,32 @@ def deslocamento(pagina: int, slot: int) -> int:
       sel.f.flush() # empurra os dados internos do buffer da RAM do python para a RAM do Sistema Operacioanal 
       os.fsync(self.f.fileno())
 
+    def close (self) -> None:
+      if not self.f.closed:
+        self.sync()
+        self.f.close()
+
+# FORMATOS DE CABEÇALHO E PÁGINA O 
+
+    def inicializa_pagina_0 (self) -> None:
+      """Página 0: Metadados(Magic Number, versão, tamanho da página ())
+    """
+      self.aloca ()
+      p0 = bytearray (TAMANHO_PAGINA)
+      cabecalho = struct.pack (">8sHIII", MAGIC_NUMBER, 1, TAMANHO_PAGINA, 1, 1) 
+      """ ">8HIII" define o layout exato dos bytes na memória """
+      p0[0 : len(cabecalho)] = cabecalho
+      self.escreve (0, bytes(p0))
+
+    def inicializa_pagina_dados (self, n:int) -> bytearray:
+      """"Formata o cabecalho de 16 bytes em uma nova página de dados"""
+      p = bytearray (TAMANHO_PAGINA)
+      cabecalho = struct.pack (">HIII8s", 0, TAMANHO_REGISTRO, n, b'\x00' * 8) 
+      p[0: TAMANHO_CABECALHO] = cabecalho
+      self.escreve_pagina(n, bytes(p))
+      return p
+
+
+
+
 
