@@ -59,14 +59,4 @@ def deslocamento(pagina: int, slot: int) -> int:
       os.fsync(self.f.fileno())
       # FORMATOS DE CABEÇALHO E PÁGINA O 
 
-def inicializa_pagina_0 (self) -> None:
-  """Página 0: Metadados(Magic Number, versão, tamanho da página ())"""
-  self.aloca ()
-  p0 = bytearray (TAMANHO_PAGINA)
-  cabecalho = struct.pack (">8sHIII", MAGIC_NUMBER, 1, TAMANHO_PAGINA, 1, 1) 
-  """ ">8HIII" define o layout exato dos bytes na memória """
-  p0[0 : len(cabecalho)] = cabecalho
-  self.escreve (0, bytes(p0))
-
-
-
+  
