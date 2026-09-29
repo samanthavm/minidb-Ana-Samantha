@@ -59,6 +59,7 @@ class Pager:
     def sync(self):
       self.f.flush() # empurra os dados internos do buffer da RAM do python para a RAM do Sistema Operacioanal 
       os.fsync(self.f.fileno())
+      # FORMATOS DE CABEÇALHO E PÁGINA O 
 
     def close (self) -> None:
       if not self.f.closed:
@@ -205,3 +206,4 @@ if __name__ == "__main__":
 
 
 
+  
