@@ -1,5 +1,5 @@
 import os
-from minidb import Pager, escreve_pagina, le_pagina, insere, serializar_registro, deserializar_registro
+from minidb.M1 import Pager, escreve_pagina, le_pagina, insere, serializar_registro, deserializar_registro
 
 # Apaga o banco de teste antigo se existir
 if os.path.exists("teste.db"):
