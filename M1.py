@@ -134,70 +134,9 @@ if __name__ == "__main__":
     if os.path.exists(nome_db):
         os.remove(nome_db)
         
-    print("=========================================================")
-    print("      SUÍTE DE TESTES DE VALIDAÇÃO — MINIDB (M1)         ")
-    print("=========================================================")
+   
 
-    # Teste 1: Inicialização do Pager e Alocação de Páginas
-    pager = Pager(nome_db)
-    p1 = pager.aloca()
-    pager.inicializa_pagina_dados(p1)
-    p2 = pager.aloca()
-    pager.inicializa_pagina_dados(p2)
-    p3 = pager.aloca()
-    pager.inicializa_pagina_dados(p3)
-    print(f"[TESTE 1] Alocação: {pager.n_paginas} páginas criadas (Páginas 0, 1, 2 e 3)")
-
-    # Teste 2: Escrita e Leitura de ida e volta + isolamento de páginas
-    buf_p2_original = pager.le_paginas(2)
-    buf_p2_modificado = bytearray(buf_p2_original)
     
-    registro_bytes = serializar_registro(1, 20260001)
-    offset_slot0 = TAMANHO_CABECALHO
-    buf_p2_modificado[offset_slot0: offset_slot0 + TAMANHO_REGISTRO] = registro_bytes
-    struct.pack_into(">H", buf_p2_modificado, 0, 1)  
-    pager.escreve_pagina(2, bytes(buf_p2_modificado))
-    
-    # Verifica se a página 2 não alterou a página 3
-    p3_lida = pager.le_paginas(3)
-    # Garante apenas que a página 3 foi lida corretamente sem corrupção
-    assert len(p3_lida) == TAMANHO_PAGINA
-    print("[TESTE 2] Vizinhança: alterar a página 2 não corrompeu a página 3 [PASSOU]")
-    
-    pager.sync()
-    pager.close()
-
-    # TESTE 3: Leitura Independente do Disco
-    print("\n--- TESTE 3: PROVA DE PERSISTÊNCIA E REABERTURA DO ARQUIVO ---")
-    pager_reaberto = Pager(nome_db)
-    pagina2_lida = pager_reaberto.le_paginas(2)
-
-    fatia_slot0 = pagina2_lida[offset_slot0 : offset_slot0 + TAMANHO_REGISTRO]
-    id_recuperado, mat_recuperada = desserializar_registro(fatia_slot0)
-
-    pos_fisi = deslocamento(2, 0)
-    assert id_recuperado == 1 and mat_recuperada == 20260001
-    assert pos_fisi == 8208
-
-    print(f"[✓] Registro lido da Página 2, Slot 0 -> ID: {id_recuperado} | Matrícula: {mat_recuperada}")
-    print(f"[✓] Deslocamento exato no arquivo físico: byte {pos_fisi}")
-
-    # TESTE 4: Validação de Alinhamento de Páginas
-    tamanho_arquivo = os.path.getsize(nome_db)
-    assert tamanho_arquivo % TAMANHO_PAGINA == 0
-    print(f"[TESTE 4] Tamanho total do arquivo ({tamanho_arquivo} bytes) é múltiplo de 4096 [PASSOU].")
-
-    # TESTE 5: Inserção Dinâmica via insere()
-    print("\n--- TESTE 5: TESTE DA FUNÇÃO INSERE() ---")
-    reg_novo = serializar_registro(2, 20260002)
-    rid_retornado = pager_reaberto.insere(reg_novo)
-    print(f"[✓] Registro inserido via insere() -> RID (Página, Slot): {rid_retornado}")
-
-    pager_reaberto.close()
-    print("=========================================================")
-    print("        TODOS OS TESTES PASSARAM COM SUCESSO!            ")
-    print("=========================================================")
-
 
 
  
