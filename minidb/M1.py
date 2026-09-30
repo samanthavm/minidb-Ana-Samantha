@@ -128,13 +128,7 @@ def desserializar_registro(registro_bytes: bytes) -> tuple[int, int]:
       return struct.unpack(">II", registro_bytes)
 
 
-# Bloco de teste
-if __name__ == "__main__":
-    nome_db = "dados.db" 
-    if os.path.exists(nome_db):
-        os.remove(nome_db)
-        
-   
+
 
     
 
