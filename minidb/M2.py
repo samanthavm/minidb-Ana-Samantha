@@ -15,6 +15,7 @@ class Cache:
             self.acertos += 1 
             self.uso.move_to_end(n)
         else: #a pagina não esta no cache
+            self.pager.valida(n)
             self.faltas += 1 
             if len(self.frames) == self.cap: #verifica se tem espaço
                 self._expulsa() 

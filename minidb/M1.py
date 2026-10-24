@@ -28,7 +28,7 @@ class Pager:
 
     def valida(self, n:int)-> None:
         if n < 0 or n >= self.n_paginas:
-          raise IndexError(f"Acesso inválido a página {n}.Total de páginas {self.nu_paginas}") #raise invocar uma exceção 
+          raise IndexError(f"Acesso inválido a página {n}.Total de páginas {self.n_paginas}") #raise invocar uma exceção 
         """IndexError um erro na lógica de manipulação de dados """
     
     def le_paginas(self, n:int) -> bytearray: #bytearry é uma sequência mutável de inteiros entre 0 e 255 que serve para armazenar e modificar dados binários
@@ -46,13 +46,11 @@ class Pager:
         raise IOError (F"Página com {len(buf)} bytes. A página deve ter {TAMANHO_PAGINA} bytes")
       self.f.seek(TAMANHO_PAGINA * n) 
       self.f.write(buf) # Escreve um sequência de bytes no arquivp físico, a partir da posição do cursor. 
-    
+
     def aloca(self) -> int:
-      n= self.n_paginas
-      self.f.seek(TAMANHO_PAGINA)
+      n = self.n_paginas
+      self.f.seek(n * TAMANHO_PAGINA)
       self.f.write(bytes(TAMANHO_PAGINA))
-      """A função bytes() transforma o número inteiro que foi passado como argumento  em um objeto  preenchido por 0, no nosso caso vai ter 4096 zeros """
-      """Agora o self.f.write vai gravar essa sequencia de zeros no arquivo sequência"""
       self.n_paginas += 1
       return n
     
@@ -76,10 +74,10 @@ class Pager:
         self.escreve_pagina(0, bytes(p0))
 
     def inicializa_pagina_dados(self, n: int) -> bytearray:
-        """Formata o cabeçalho de 16 bytes em uma nova página de dados"""
+        #Formata o cabeçalho de 16 bytes em uma nova página de dados
         p = bytearray(TAMANHO_PAGINA)
-        cabecalho = struct.pack(">HII6s", 0, TAMANHO_REGISTRO, n, b'\x00' * 8)
-        p[0: TAMANHO_CABECALHO] = cabecalho
+        cabecalho = struct.pack(">HII6x", 0, TAMANHO_REGISTRO, n)
+        p[0:TAMANHO_CABECALHO] = cabecalho
         self.escreve_pagina(n, bytes(p))
         return p
 
