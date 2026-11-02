@@ -7,7 +7,8 @@ Realizamos a implementação das funções basicas necessárias para o módulo 1
 * `deslocamento(pagina, slot)`: Calcula o byte absoluto do registro via fórmula `(página * 4096) + 16 + (slot * 8)`.
 * `aloca()`: Expande o banco de dados gravando 4096 zeros binários (`b'\x00'`) ao final do arquivo e incrementa o totalizador de páginas.
 * `sync()`: Combina `f.flush()` com `os.fsync(f.fileno())` para forçar a gravação física da memória RAM do sistema operacional no disco rígido.
-
+# M2 
+O Módulo 2 do projeto `minidb` implementa o **Buffer Pool Manager**, atuando como a camada intermediária de gestão de memória RAM entre o motor do banco de dados e o sistema de armazenamento em disco (gerido pelo Pager do Módulo 1). O principal objetivo desta camada é **otimizar drasticamente o desempenho do SGBD**, reduzindo as operações lentas de I/O em disco através do armazenamento temporário e inteligente de páginas de dados na memória.
 # M3
 Cada nó da árvore B+ ocupa uma página de 4096 bytes do arquivo de índice, gravada com `struct` em big-endian, como no M1. A página começa com um cabeçalho de 3 bytes, igual nos dois tipos de nó, com os cmpos`eh_folha` (`B`, 1 byte) e `quant`, o número de chaves (`H`, 2 bytes).
 O `eh_folha` permite saber como interpretar o resto da página. Na folha, logo após o cabeçalho vem o `pont_prox` (`i`, 4 bytes, com sinal para aceitar o `-1` de "não há próxima folha"), seguido de `quant` entradas de 10 bytes, cada uma com a chave (`I`), a página do registro (`I`) e o slot (`H`) no arquivo de dados do M1.
