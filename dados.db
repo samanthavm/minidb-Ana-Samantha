@@ -1,1 +1,6 @@
-
+tabela_usuarios = [
+    {"id": 1, "nome": "Ana", "idade": 20},
+    {"id": 2, "nome": "Carlos", "idade": 25},
+    {"id": 3, "nome": "Beatriz", "idade": 30},
+    {"id": 4, "nome": "Daniel", "idade": 22}
+]
